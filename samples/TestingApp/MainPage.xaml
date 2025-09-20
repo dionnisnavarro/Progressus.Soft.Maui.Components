@@ -22,6 +22,8 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+            <Label Text="Bottom sheet"/>
+            <Button Text="Launch sheet" Clicked="Button_Clicked_2" />
             <Label Text="Alert"/>
             <Button Text="Display alert" Clicked="Button_Clicked_1" Command="{Binding Source={x:Reference this}, Path=AttachAlertToTheParentLayoutCommand}" CommandParameter="{Binding Source={RelativeSource Self}}"/>
             <components:Alert Title="Info" Message="Alert type Success" DisplayRefreshButton="True" AlertType="Success"/>
@@ -69,8 +71,6 @@
                     </components:MultiStepForm.Steps>
                 </components:MultiStepForm>
             </components:BorderItem>
-
-            
         </VerticalStackLayout>
     </ScrollView>
 

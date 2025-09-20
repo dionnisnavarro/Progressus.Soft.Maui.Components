@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<components:BorderItem  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:Progressus.Soft.Maui.Components"
+    x:Class="Progressus.Soft.Maui.Components.BottomSheet"
+    Padding="20"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="End"
+    TranslationY="300"
+    StrokeThickness="0"
+    ShapeCornerRadius="10,10,0,0">
+    <Grid ColumnDefinitions="*,10" RowDefinitions="*,*">
+        <Label Text="{Binding Source={x:Reference this}, Path=Title}" VerticalOptions="Center" HorizontalOptions="Center"/>
+        <ImageButton Grid.Column="1" MinimumHeightRequest="10" MinimumWidthRequest="10"
+             WidthRequest="20" HeightRequest="20"
+             BackgroundColor="Transparent"
+             Source="ic_highlight_off_white_18dp.png" 
+             VerticalOptions="Start"
+             HorizontalOptions="End"
+             Command="{Binding Source={x:Reference this}, Path=ClosingCommand}" 
+             IsVisible="{Binding Source={x:Reference this}, Path=Dismissible}"
+             Clicked="OnCloseButtonClicked"/>
+        <ScrollView Grid.Row="1" Content="{Binding Source={x:Reference this}, Path=SheetContent}"/>
+    </Grid>
+</components:BorderItem>

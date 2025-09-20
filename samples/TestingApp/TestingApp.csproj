@@ -60,7 +60,10 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.72" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.72" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Progressus.Soft.Maui.Components" Version="1.2.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Progressus.Soft.Maui.Components\Progressus.Soft.Maui.Components.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

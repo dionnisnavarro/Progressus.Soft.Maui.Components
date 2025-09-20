@@ -39,6 +39,11 @@ namespace TestingApp
             //AppShell.SetNavBarIsVisible(container, false);
             await Alert.DisplayAlertAsync(Shell.Current.CurrentPage?.Navigation, "From method", "Success alert from DisplayAlertAsync", AlertType.Information);
 		}
-	}
+
+		private async void Button_Clicked_2(object sender, EventArgs e)
+		{
+			await BottomSheet.DisplayAsync(Navigation, "Me resingo en Diaz Canel", new Label() { Text = "Es la pinga mia."});
+		}
+    }
 
 }
