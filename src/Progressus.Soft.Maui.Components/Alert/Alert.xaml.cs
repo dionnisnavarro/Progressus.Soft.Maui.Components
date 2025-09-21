@@ -1,4 +1,5 @@
 
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -25,13 +26,25 @@ public partial class Alert : BorderItem, INotifyPropertyChanged
         returnType: typeof(Command),
         declaringType: typeof(Alert),
         defaultValue: null);
+    public static readonly BindableProperty ClosingCommandParameterProperty =
+    BindableProperty.Create(
+        propertyName: nameof(ClosingCommandParameter),
+        returnType: typeof(object),
+        declaringType: typeof(Alert),
+        defaultValue: null);
     public static readonly BindableProperty RefreshCommandProperty =
     BindableProperty.Create(
         propertyName: nameof(RefreshCommand),
         returnType: typeof(Command),
         declaringType: typeof(Alert),
         defaultValue: null);
-    public static readonly BindableProperty DisplayRefreshButtonProperty =
+	public static readonly BindableProperty RefreshCommandParameterProperty =
+	BindableProperty.Create(
+		propertyName: nameof(RefreshCommandParameter),
+		returnType: typeof(object),
+		declaringType: typeof(Alert),
+		defaultValue: null);
+	public static readonly BindableProperty DisplayRefreshButtonProperty =
     BindableProperty.Create(
         propertyName: nameof(DisplayRefreshButton),
         returnType: typeof(bool),
@@ -56,6 +69,41 @@ public partial class Alert : BorderItem, INotifyPropertyChanged
         returnType: typeof(bool),
         declaringType: typeof(Alert),
         defaultValue: true);
+    public static readonly BindableProperty IconSourceProperty =
+    BindableProperty.Create(
+        propertyName: nameof(IconSource),
+        returnType: typeof(string),
+		//defaultValue: "ic_error_outline_white_48dp.png",
+		declaringType: typeof(Alert));
+    public static readonly BindableProperty ColorProperty =
+    BindableProperty.Create(
+        propertyName: nameof(Color),
+        returnType: typeof(Color),
+		defaultValue: Color.Parse("#dc3545"),
+        declaringType: typeof(Alert));
+    public static readonly BindableProperty RefreshTextProperty =
+    BindableProperty.Create(
+        propertyName: nameof(RefreshText),
+        returnType: typeof(string),
+		defaultValue: "Refresh",
+        declaringType: typeof(Alert));
+	public static readonly BindableProperty CancelTextProperty =
+	BindableProperty.Create(
+		propertyName: nameof(CancelText),
+		returnType: typeof(string),
+		defaultValue: "Close",
+		declaringType: typeof(Alert));
+	public string RefreshText
+	{
+        get => (string)GetValue(RefreshTextProperty);
+        set => SetValue(RefreshTextProperty, value);
+    }
+    
+    public string CancelText
+	{
+        get => (string)GetValue(CancelTextProperty);
+        set => SetValue(CancelTextProperty, value);
+    }
     public bool Dismissible
     {
         get => (bool)GetValue(DismissibleProperty);
@@ -77,6 +125,16 @@ public partial class Alert : BorderItem, INotifyPropertyChanged
     {
         get => (Command)GetValue(ClosingCommandProperty);
         set => SetValue(ClosingCommandProperty, value);
+    }
+    public object ClosingCommandParameter
+    {
+        get => (object)GetValue(ClosingCommandParameterProperty);
+        set => SetValue(ClosingCommandParameterProperty, value);
+    }
+    public object RefreshCommandParameter
+    {
+        get => (object)GetValue(RefreshCommandParameterProperty);
+        set => SetValue(RefreshCommandParameterProperty, value);
     }
     public Command RefreshCommand
     {
@@ -104,60 +162,53 @@ public partial class Alert : BorderItem, INotifyPropertyChanged
         }
     }
 
-    Color _color = Color.Parse("#dc3545");
     public Color Color
     {
-        get { return _color; }
-        private set { SetProperty(ref _color, value); }
-    }
+		get => (Color)GetValue(ColorProperty);
+		set => SetValue(ColorProperty, value);
+	}
 
-	string _source;
 	public string IconSource
 	{
-		get { return _source; }
-		private set { SetProperty(ref _source, value); }
+		get => (string)GetValue(IconSourceProperty);
+		set => SetValue(IconSourceProperty, value);
 	}
 	static void OnAlertTypeChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable != null && bindable is Alert && newValue != null && newValue is AlertType)
+        if (bindable != null && bindable is Alert alert && newValue != null && newValue is AlertType type)
         {
-            switch((AlertType)newValue)
+            switch(type)
             {
                 case AlertType.Success:
-                    (bindable as Alert)!.Color = Color.Parse("#198754");
-                    (bindable as Alert)!.IconSource = "ic_check_circle_white_48dp.png" ;
-                    break;
+                    alert.Color = Color.Parse("#198754");
+					//alert.IconSource = "ic_check_circle_white_48dp.png" ;
+					alert.SetAppTheme(IconSourceProperty, "ic_check_circle_black_48dp.png", "ic_check_circle_white_48dp.png");
+					break;
                 case AlertType.Danger:
-                    (bindable as Alert)!.Color = Color.Parse("#dc3545");
-					(bindable as Alert)!.IconSource = "ic_error_outline_white_48dp.png";
+                    alert.Color = Color.Parse("#dc3545");
+					//alert.IconSource = "ic_error_outline_white_48dp";
+					alert.SetAppTheme(IconSourceProperty, "ic_error_outline_black_48dp.png", "ic_error_outline_white_48dp.png");
 					break;
                 case AlertType.Warning:
-                    (bindable as Alert)!.Color = Color.Parse("#ffc107");
-					(bindable as Alert)!.IconSource = "ic_warning_white_48dp.png";
+                    alert.Color = Color.Parse("#ffc107");
+					//alert.IconSource = "ic_warning_white_48dp.png";
+					alert.SetAppTheme(IconSourceProperty, "ic_warning_black_48dp.png", "ic_warning_white_48dp.png");
 					break;
                 case AlertType.Information:
-                    (bindable as Alert)!.Color = Color.Parse("#0dcaf0");
-					(bindable as Alert)!.IconSource = "ic_info_outline_white_48dp.png";
+                    alert.Color = Color.Parse("#0dcaf0");
+					//alert.IconSource = "ic_info_outline_white_48dp.png";
+					alert.SetAppTheme(IconSourceProperty, "ic_info_outline_black_48dp.png", "ic_info_outline_white_48dp.png");
 					break;
             }
         }
     }
 
-    protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName] string propertyName = "",
-            Action onChanged = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(backingStore, value))
-            return false;
-
-        backingStore = value;
-        onChanged?.Invoke();
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-    public Alert()
+	public delegate void ClosedEventHandler(object sender, EventArgs e);
+	public event ClosedEventHandler OnClose;
+	public Alert()
 	{
 		InitializeComponent();
+		this.SetAppTheme(Alert.IconSourceProperty, "ic_error_outline_black_48dp.png", "ic_error_outline_white_48dp.png");
 	}
     public Alert(string title, string message, bool displayRefresh = false, AlertType alertType = AlertType.Success)
     {
@@ -169,17 +220,17 @@ public partial class Alert : BorderItem, INotifyPropertyChanged
 
     private async void CloseButton_Clicked(object sender, EventArgs e)
     {
-        if((sender as ImageButton).Command == null)
-        {
-            var parent = Parent;
-            //Find out if alert is a child of a modal content page (displayed as modal)
-            if(parent is not null && parent is ContentPage && (parent as ContentPage)!.Navigation.ModalStack.Any(l => l.Id == parent.Id))
-            {
-				await (parent as ContentPage)!.Navigation.PopModalAsync(false);
-			}else
-                IsVisible = false;
-        }
-    }
+		if (ClosingCommand != null) ClosingCommand.Execute(ClosingCommandParameter);
+		var parent = Parent;
+		//Find out if alert is a child of a modal content page (displayed as modal)
+		if (parent is not null && parent is ContentPage page && page.Navigation.ModalStack.Any(l => l.Id == parent.Id))
+		{
+			await page.Navigation.PopModalAsync(false);
+		}
+		else
+			IsVisible = false;
+		OnClose?.Invoke(this, new EventArgs());
+	}
 
 	/// <summary>
 	/// Display alert as a modal window
