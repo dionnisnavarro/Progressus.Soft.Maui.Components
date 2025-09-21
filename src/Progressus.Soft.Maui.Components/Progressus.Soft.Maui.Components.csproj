@@ -36,7 +36,7 @@
     <PackageTags>.Net Maui;Component;Border;MAUI Components</PackageTags>
     <!-- Package validation -->
     <EnablePackageValidation>true</EnablePackageValidation>
-    <PackageVersion>1.2.5</PackageVersion>
+    <PackageVersion>1.2.6</PackageVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
   
